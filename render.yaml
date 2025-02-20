@@ -1,8 +1,14 @@
 services:
-  - name: crud
-    type: web
-    env: docker
-    repo: https://github.com/pacho37/crud
-    branch: main
-    plan: free
-    healthCheckPath: /
+  - type: web
+    name: crud-app
+    runtime: docker
+    repo: https://github.com/pacho37/crud.git
+    envVars:
+      - key: APP_ENV
+        value: production
+    buildCommand: |
+      apt-get update
+      apt-get install -y apache2 libapache2-mod-php php php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip
+      cp apache2.conf /etc/apache2/sites-available/000-default.conf
+      a2enmod rewrite
+    startCommand: service apache2 restart && apachectl -D FOREGROUND
