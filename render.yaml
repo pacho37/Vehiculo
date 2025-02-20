@@ -13,4 +13,5 @@ services:
       composer install --no-dev --optimize-autoloader
       cp apache2.conf /etc/apache2/sites-available/000-default.conf
       a2enmod rewrite
+      service apache2 restart
     startCommand: apachectl -D FOREGROUND
