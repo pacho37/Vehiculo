@@ -1,14 +1,18 @@
 # Imagen base con PHP y Apache
 FROM php:8.3-apache
 
+# Instalar dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    unzip \
+    libpq-dev \
+    sqlite3 \
+    libsqlite3-dev && \
+    docker-php-ext-install pdo pdo_mysql pdo_sqlite
+
 # Crear la base de datos SQLite en la ubicación correcta
 RUN mkdir -p /var/www/html/database && \
     touch /var/www/html/database/database.sqlite && \
     chmod -R 777 /var/www/html/database
-
-# Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y unzip libpq-dev && \
-    docker-php-ext-install pdo pdo_mysql pdo_sqlite
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
