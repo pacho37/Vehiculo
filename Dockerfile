@@ -1,16 +1,26 @@
-# Imagen base de PHP con Apache
+# Imagen base con PHP y Apache
 FROM php:8.3-apache
 
-# Instalar extensiones necesarias
-RUN docker-php-ext-install pdo pdo_mysql
+# Instalar extensiones necesarias para Laravel
+RUN apt-get update && apt-get install -y unzip libpq-dev && \
+    docker-php-ext-install pdo pdo_mysql
 
-# Copiar archivos de Laravel al contenedor
-COPY . /var/www/html
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Establecer directorio de trabajo
+# Configurar el directorio de trabajo
 WORKDIR /var/www/html
 
-# Dar permisos a storage y bootstrap
+# Copiar archivos del proyecto
+COPY . .
+
+# Instalar dependencias de Laravel
+RUN composer install --no-dev --optimize-autoloader
+
+# Generar clave de aplicación
+RUN php artisan key:generate
+
+# Dar permisos a storage y bootstrap/cache
 RUN chmod -R 777 storage bootstrap/cache
 
 # Exponer el puerto 80
