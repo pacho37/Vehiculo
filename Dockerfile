@@ -5,6 +5,9 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
+    libsqlite3-dev \
+    sqlite3 \
+    && docker-php-ext-configure pdo_sqlite --with-pdo-sqlite=/usr \
     && docker-php-ext-install zip pdo pdo_sqlite
 
 # Habilitar mod_rewrite para Laravel
