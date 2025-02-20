@@ -1,7 +1,7 @@
 # Imagen base con PHP y Apache
 FROM php:8.3-apache
 
-# Instalar extensiones necesarias para Laravel
+# Instalar dependencias necesarias
 RUN apt-get update && apt-get install -y unzip libpq-dev && \
     docker-php-ext-install pdo pdo_mysql
 
@@ -14,17 +14,20 @@ WORKDIR /var/www/html
 # Copiar archivos del proyecto
 COPY . .
 
+# Crear el archivo .env si no existe
+RUN cp .env.example .env || true
+
 # Instalar dependencias de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Generar clave de aplicación
-RUN php artisan key:generate
+# Generar clave de aplicación solo si el .env existe
+RUN if [ -f ".env" ]; then php artisan key:generate; fi
 
 # Dar permisos a storage y bootstrap/cache
 RUN chmod -R 777 storage bootstrap/cache
 
-# Exponer el puerto 80
-EXPOSE 80
+# Exponer el puerto 8000
+EXPOSE 8000
 
 # Comando de inicio
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
