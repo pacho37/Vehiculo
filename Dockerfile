@@ -29,5 +29,7 @@ RUN chmod -R 777 storage bootstrap/cache
 # Exponer el puerto 8000
 EXPOSE 8000
 
+RUN mkdir -p /var/data && touch /var/data/database.sqlite && chmod 777 /var/data/database.sqlite
+
 # Comando de inicio
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
