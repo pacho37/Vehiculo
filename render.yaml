@@ -2,7 +2,7 @@ services:
   - type: web
     name: crud-app
     runtime: docker
-    repo: https://github.com/pacho37/crud.git
+    repo: https://github.com/pacho37/Vehiculo.git
     envVars:
       - key: APP_ENV
         value: production
@@ -11,6 +11,9 @@ services:
       apt-get install -y apache2 libapache2-mod-php php php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip
       apt-get install -y composer
       composer install --no-dev --optimize-autoloader
+      chown -R www-data:www-data /var/www/html
+      chmod -R 755 /var/www/html
+      chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
       cp apache2.conf /etc/apache2/sites-available/000-default.conf
       a2enmod rewrite
       service apache2 restart
