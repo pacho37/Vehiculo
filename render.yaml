@@ -9,6 +9,8 @@ services:
     buildCommand: |
       apt-get update
       apt-get install -y apache2 libapache2-mod-php php php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip
+      apt-get install -y composer
+      composer install --no-dev --optimize-autoloader
       cp apache2.conf /etc/apache2/sites-available/000-default.conf
       a2enmod rewrite
-    startCommand: service apache2 restart && apachectl -D FOREGROUND
+    startCommand: apachectl -D FOREGROUND
