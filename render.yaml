@@ -1,0 +1,8 @@
+services:
+  - name: crud
+    type: web
+    env: docker
+    repo: https://github.com/pacho37/crud
+    branch: main
+    plan: free
+    healthCheckPath: /
