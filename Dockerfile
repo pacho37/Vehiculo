@@ -1,6 +1,10 @@
 # Imagen base con PHP y Apache
 FROM php:8.3-apache
 
+RUN mkdir -p /var/data && \
+    touch /var/data/database.sqlite && \
+    chmod -R 777 /var/data
+
 # Instalar dependencias necesarias
 RUN apt-get update && apt-get install -y unzip libpq-dev && \
     docker-php-ext-install pdo pdo_mysql
@@ -29,7 +33,6 @@ RUN chmod -R 777 storage bootstrap/cache
 # Exponer el puerto 8000
 EXPOSE 8000
 
-RUN mkdir -p /var/data && touch /var/data/database.sqlite && chmod 777 /var/data/database.sqlite
 
 # Comando de inicio
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=80
