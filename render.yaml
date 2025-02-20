@@ -2,7 +2,7 @@ services:
   - type: web
     name: crud-app
     runtime: docker
-    repo: https://github.com/pacho37/Vehiculo.git
+    repo: https://github.com/pacho37/crud.git
     envVars:
       - key: APP_ENV
         value: production
